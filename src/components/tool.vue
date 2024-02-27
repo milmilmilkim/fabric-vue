@@ -1,45 +1,19 @@
 <template>
   <div class="p-5 flex justify-between bg-gray-50 w-full mb-5">
     <div>
-      <button @click="handleClickImageList" class="p-1 mr-3 bg-gray-200">
-        이미지 추가
-      </button>
-      <button class="p-1 mr-3 bg-gray-200" @click="handleUploadClick">
-        업로드 이미지
-      </button>
-      <button
-        @click="canvasControls.addText('Text')"
-        class="p-1 mr-3 bg-gray-200"
-      >
-        텍스트 추가
-      </button>
-      <button
-        :disabled="!canvasControls.selectedObjects.value.length"
-        @click="canvasControls.deleteActiveObjects"
-        class="p-1 bg-red-100 disabled:text-gray-400 disabled:bg-gray-50"
-      >
-        선택 삭제
-      </button>
-      <input
-        :value="canvasControls.currentZoom.value"
-        class="ml-3"
-        type="text"
-        readonly
-      />
+      <button @click="handleClickImageList" class="p-1 mr-3 bg-gray-200">이미지 추가</button>
+      <button class="p-1 mr-3 bg-gray-200" @click="handleUploadClick">업로드 이미지</button>
+      <button @click="canvasControls.addText('Text')" class="p-1 mr-3 bg-gray-200">텍스트 추가</button>
+      <button :disabled="!canvasControls.selectedObjects.value.length" @click="canvasControls.deleteActiveObjects" class="p-1 bg-red-100 disabled:text-gray-400 disabled:bg-gray-50">선택 삭제</button>
+      <input :value="canvasControls.currentZoom.value" class="ml-3" type="text" readonly />
     </div>
 
     <div>
-      <button @click="loadDefaultTemplate" class="p-1 bg-gray-200 mr-3">
-        기본 템플릿 불러오기
-      </button>
-      <button @click="isShowModal = true" class="p-1 bg-gray-200 mr-3">
-        JSON 불러오기
-      </button>
+      <button @click="loadDefaultTemplate" class="p-1 bg-gray-200 mr-3">기본 템플릿 불러오기</button>
+      <button @click="isShowModal = true" class="p-1 bg-gray-200 mr-3">JSON 불러오기</button>
 
       <button class="p-1 mr-3 bg-gray-200" @click="save">JSON 내보내기</button>
-      <button @click="exportImage" class="p-1 bg-gray-200 mr-3">
-        이미지 저장하기
-      </button>
+      <button @click="exportImage" class="p-1 bg-gray-200 mr-3">이미지 저장하기</button>
     </div>
   </div>
 
@@ -56,26 +30,14 @@
     </div>
   </modal>
 
-  <modal
-    v-if="canvasControls.isShowImageModal.value"
-    @close="canvasControls.closeImageModal()"
-  >
+  <modal v-if="canvasControls.isShowImageModal.value" @close="canvasControls.closeImageModal()">
     <h2>이미지 교체하기</h2>
-    <image-list
-      type="REPLACE"
-      @setImage="replaceImage"
-      :selectedObjects="canvasControls.selectedObjects.value"
-    />
+    <image-list type="REPLACE" @setImage="replaceImage" :selectedObjects="canvasControls.selectedObjects.value" />
   </modal>
 
   <template v-if="isShowUploader">
     <modal @close="isShowUploader = false">
-      <img
-        v-if="preview"
-        class="mb-3 w-16 h-16 object-cover"
-        :src="preview"
-        alt="이미지 파일 미리보기"
-      />
+      <img v-if="preview" class="mb-3 w-16 h-16 object-cover" :src="preview" alt="이미지 파일 미리보기" />
       <input type="file" accept="image/*" @change="handleChangeFile" />
       <button class="p-1 bg-blue-50" @click="handleClickUpload">업로드</button>
     </modal>
@@ -83,34 +45,34 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref } from "vue";
-import { FabricJson, useFabricCanvas } from "./fabricComposable";
-import modal from "./ui/modal.vue";
-import { uploadImage } from "../firebase/storage";
-import imageList from "./image-list.vue";
+import { inject, ref } from 'vue';
+import { FabricJson, useFabricCanvas } from './fabricComposable';
+import modal from './ui/modal.vue';
+import { uploadImage } from '../firebase/storage';
+import imageList from './image-list.vue';
 
 const isShowModal = ref(false);
 const isShowUploader = ref(false);
 
 const defaultTemplate = {
-  version: "5.3.0",
+  version: '5.3.0',
   objects: [
     {
-      type: "rect",
-      version: "5.3.0",
-      originX: "left",
-      originY: "top",
+      type: 'rect',
+      version: '5.3.0',
+      originX: 'left',
+      originY: 'top',
       left: -2,
       top: -2,
       width: 1922,
       height: 1082,
-      fill: "white",
+      fill: 'white',
       stroke: null,
       strokeWidth: 1,
       strokeDashArray: null,
-      strokeLineCap: "butt",
+      strokeLineCap: 'butt',
       strokeDashOffset: 0,
-      strokeLineJoin: "miter",
+      strokeLineJoin: 'miter',
       strokeUniform: false,
       strokeMiterLimit: 4,
       scaleX: 1,
@@ -121,10 +83,10 @@ const defaultTemplate = {
       opacity: 1,
       shadow: null,
       visible: true,
-      backgroundColor: "",
-      fillRule: "nonzero",
-      paintFirst: "fill",
-      globalCompositeOperation: "source-over",
+      backgroundColor: '',
+      fillRule: 'nonzero',
+      paintFirst: 'fill',
+      globalCompositeOperation: 'source-over',
       skewX: 0,
       skewY: 0,
       rx: 0,
@@ -137,69 +99,24 @@ const defaultTemplate = {
       lockScalingY: false,
       lockRotation: false,
       hasControls: true,
+      source: 'background',
     },
     {
-      type: "image",
-      version: "5.3.0",
-      originX: "left",
-      originY: "top",
-      left: 83.99999999999977,
-      top: 83.99999999999989,
-      width: 1536,
-      height: 864,
-      fill: "rgb(0,0,0)",
-      stroke: null,
-      strokeWidth: 0,
-      strokeDashArray: null,
-      strokeLineCap: "butt",
-      strokeDashOffset: 0,
-      strokeLineJoin: "miter",
-      strokeUniform: false,
-      strokeMiterLimit: 4,
-      scaleX: 0.6129999999999998,
-      scaleY: 0.6129999999999998,
-      angle: 0,
-      flipX: false,
-      flipY: false,
-      opacity: 1,
-      shadow: null,
-      visible: true,
-      backgroundColor: "",
-      fillRule: "nonzero",
-      paintFirst: "fill",
-      globalCompositeOperation: "source-over",
-      skewX: 0,
-      skewY: 0,
-      cropX: 0,
-      cropY: 0,
-      selectable: true,
-      evented: true,
-      lockMovementX: false,
-      lockMovementY: false,
-      lockScalingX: false,
-      lockScalingY: false,
-      lockRotation: false,
-      hasControls: true,
-      src: "https://plea-hsad-atask.s3.ap-northeast-2.amazonaws.com/img/20240222/e6844ac4b1deb2b0a60a0e1a8e39ceab.jpg",
-      crossOrigin: null,
-      filters: [],
-    },
-    {
-      type: "textbox",
-      version: "5.3.0",
-      originX: "left",
-      originY: "top",
+      type: 'textbox',
+      version: '5.3.0',
+      originX: 'left',
+      originY: 'top',
       left: 88.79999999999984,
       top: 691.1999999999998,
       width: 371.14,
       height: 45.2,
-      fill: "rgb(0,0,0)",
+      fill: 'rgb(0,0,0)',
       stroke: null,
       strokeWidth: 1,
       strokeDashArray: null,
-      strokeLineCap: "butt",
+      strokeLineCap: 'butt',
       strokeDashOffset: 0,
-      strokeLineJoin: "miter",
+      strokeLineJoin: 'miter',
       strokeUniform: false,
       strokeMiterLimit: 4,
       scaleX: 2.5873684635642857,
@@ -210,40 +127,85 @@ const defaultTemplate = {
       opacity: 1,
       shadow: null,
       visible: true,
-      backgroundColor: "",
-      fillRule: "nonzero",
-      paintFirst: "fill",
-      globalCompositeOperation: "source-over",
+      backgroundColor: '',
+      fillRule: 'nonzero',
+      paintFirst: 'fill',
+      globalCompositeOperation: 'source-over',
       skewX: 0,
       skewY: 0,
-      fontFamily: "Times New Roman",
-      fontWeight: "normal",
+      fontFamily: 'Times New Roman',
+      fontWeight: 'normal',
       fontSize: 40,
-      text: "Design Your Banner",
+      text: 'Design Your Banner',
       underline: false,
       overline: false,
       linethrough: false,
-      textAlign: "left",
-      fontStyle: "normal",
+      textAlign: 'left',
+      fontStyle: 'normal',
       lineHeight: 1.16,
-      textBackgroundColor: "",
+      textBackgroundColor: '',
       charSpacing: 0,
       styles: [],
-      direction: "ltr",
+      direction: 'ltr',
       path: null,
       pathStartOffset: 0,
-      pathSide: "left",
-      pathAlign: "baseline",
+      pathSide: 'left',
+      pathAlign: 'baseline',
       minWidth: 20,
       splitByGrapheme: false,
       selectable: true,
       evented: true,
-      lockMovementX: false,
-      lockMovementY: false,
-      lockScalingX: false,
-      lockScalingY: false,
-      lockRotation: false,
-      hasControls: true,
+      lockMovementX: true,
+      lockMovementY: true,
+      lockScalingX: true,
+      lockScalingY: true,
+      lockRotation: true,
+      hasControls: false,
+    },
+    {
+      type: 'image',
+      version: '5.3.0',
+      originX: 'left',
+      originY: 'top',
+      left: 83.99999999999977,
+      top: 83.99999999999989,
+      width: 1536,
+      height: 864,
+      fill: 'rgb(0,0,0)',
+      stroke: null,
+      strokeWidth: 0,
+      strokeDashArray: null,
+      strokeLineCap: 'butt',
+      strokeDashOffset: 0,
+      strokeLineJoin: 'miter',
+      strokeUniform: false,
+      strokeMiterLimit: 4,
+      scaleX: 0.6129999999999998,
+      scaleY: 0.6129999999999998,
+      angle: 0,
+      flipX: false,
+      flipY: false,
+      opacity: 1,
+      shadow: null,
+      visible: true,
+      backgroundColor: '',
+      fillRule: 'nonzero',
+      paintFirst: 'fill',
+      globalCompositeOperation: 'source-over',
+      skewX: 0,
+      skewY: 0,
+      cropX: 0,
+      cropY: 0,
+      selectable: true,
+      evented: true,
+      lockMovementX: true,
+      lockMovementY: true,
+      lockScalingX: true,
+      lockScalingY: true,
+      lockRotation: true,
+      hasControls: false,
+      src: 'https://firebasestorage.googleapis.com/v0/b/image-test-storage.appspot.com/o/images%2Fb5405462-a097-4813-b569-da4e639221da?alt=media',
+      filters: [],
     },
   ],
 } as any as FabricJson;
@@ -251,10 +213,8 @@ const defaultTemplate = {
 const defaultTemplateString = JSON.stringify(defaultTemplate);
 const jsonTemplate = ref(defaultTemplateString);
 
-const emits = defineEmits(["json"]);
-const canvasControls = inject("canvasControls") as ReturnType<
-  typeof useFabricCanvas
->;
+const emits = defineEmits(['json']);
+const canvasControls = inject('canvasControls') as ReturnType<typeof useFabricCanvas>;
 
 const loadTemplate = () => {
   canvasControls.loadTemplateJSON(JSON.parse(jsonTemplate.value));
@@ -266,7 +226,7 @@ const loadDefaultTemplate = () => {
 };
 const save = () => {
   const result = canvasControls.exportJSON();
-  emits("json", result);
+  emits('json', result);
 };
 
 const replaceImage = (payload: string) => {
@@ -290,11 +250,11 @@ const handleChangeFile = (e: Event) => {
     const file = files[0];
     image.value = file;
     handleFile(file);
-    targetEl.value = "";
+    targetEl.value = '';
   }
 };
 
-const preview = ref<string>("");
+const preview = ref<string>('');
 
 const image = ref<File | undefined>(undefined);
 
@@ -302,7 +262,7 @@ const handleFile = (file: File) => {
   const reader = new FileReader();
 
   reader.onloadend = () => {
-    preview.value = (reader.result as string) || "";
+    preview.value = (reader.result as string) || '';
   };
 
   if (file) {
@@ -316,7 +276,7 @@ const handleClickUpload = async () => {
       const url = await uploadImage(image.value);
       console.log(url);
     } catch (err) {
-      alert("업로드 실패");
+      alert('업로드 실패');
     } finally {
       isShowUploader.value = false;
     }
