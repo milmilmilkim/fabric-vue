@@ -373,7 +373,6 @@ export function useFabricCanvas() {
       if (obj.source === 'background') {
         width = obj.width! - OFFSET;
         height = obj.height! - OFFSET;
-        background = obj;
       } else {
         obj.selectable = true; // 객체를 선택 가능하게
         obj.lockMovementX = true; // X축 이동 잠금
@@ -387,7 +386,7 @@ export function useFabricCanvas() {
 
     await loadJSON(json);
     const objects = canvas.getObjects();
-    objects.forEach((obj) => canvas.setActiveObject(obj));
+
     setCenter(width!, height!);
     resetZoom();
     saveHistory();
