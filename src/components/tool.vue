@@ -4,6 +4,7 @@
       <button @click="handleClickImageList" class="p-1 mr-3 bg-gray-200">이미지 추가</button>
       <button class="p-1 mr-3 bg-gray-200" @click="handleUploadClick">업로드 이미지</button>
       <button @click="canvasControls.addText('Text')" class="p-1 mr-3 bg-gray-200">텍스트 추가</button>
+
       <button :disabled="!canvasControls.selectedObjects.value.length" @click="canvasControls.deleteActiveObjects" class="p-1 bg-red-100 disabled:text-gray-400 disabled:bg-gray-50">선택 삭제</button>
       <input :value="canvasControls.currentZoom.value" class="ml-3" type="text" readonly />
     </div>

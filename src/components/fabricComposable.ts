@@ -28,6 +28,7 @@ export function useFabricCanvas() {
   const currentZoom = ref(1);
   const center = { x: 0, y: 0 };
 
+  let background: CustomFabricObject;
   const selectedObjects = ref<fabric.Object[]>([]);
   const isShowImageModal = ref(false);
   const initialized = ref(false);
@@ -87,10 +88,26 @@ export function useFabricCanvas() {
       source: 'background',
     } as CustomFabricObject);
 
+    background = canvasBackground as CustomFabricObject;
+
     canvas?.absolutePan(new fabric.Point(-center.x, -center.y));
 
     canvas.add(canvasBackground);
     canvas.sendToBack(canvasBackground);
+  };
+
+  const resizeCanvas = (width: number, height: number) => {
+    console.log('resize');
+    if (background) {
+      console.log(background);
+      background.set({
+        width: width + OFFSET,
+        height: height + OFFSET,
+      });
+
+      setCenter(width, height);
+      resetZoom();
+    }
   };
 
   const init = (canvasElementRef: Ref<HTMLCanvasElement | undefined>, _canvasWidth: number, _canvasHeight: number) => {
@@ -356,6 +373,7 @@ export function useFabricCanvas() {
       if (obj.source === 'background') {
         width = obj.width! - OFFSET;
         height = obj.height! - OFFSET;
+        background = obj;
       } else {
         obj.selectable = true; // 객체를 선택 가능하게
         obj.lockMovementX = true; // X축 이동 잠금
@@ -537,5 +555,6 @@ export function useFabricCanvas() {
     exportImage,
     setZoom,
     resetZoom,
+    resizeCanvas,
   };
 }
