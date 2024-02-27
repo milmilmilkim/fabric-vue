@@ -119,6 +119,21 @@ export function useFabricCanvas() {
       window.addEventListener('keydown', handleKeyDown);
 
       const updateSelectedObjects = (e: fabric.IEvent) => {
+        const selected = e.selected || [];
+        if (selected?.length > 1) {
+          canvas.discardActiveObject();
+
+          const activeSelection = new fabric.ActiveSelection(
+            selected.filter((v) => !v.lockMovementX),
+            {
+              canvas: canvas,
+            }
+          );
+
+          if (activeSelection._objects.length) {
+            canvas.setActiveObject(activeSelection);
+          }
+        }
         selectedObjects.value = getActiveObjects();
       };
 
@@ -353,6 +368,8 @@ export function useFabricCanvas() {
     });
 
     await loadJSON(json);
+    const objects = canvas.getObjects();
+    objects.forEach((obj) => canvas.setActiveObject(obj));
     setCenter(width!, height!);
     resetZoom();
     saveHistory();
