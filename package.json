@@ -15,6 +15,7 @@
     "axios": "^1.6.7",
     "fabric": "^5.3.0",
     "firebase": "^10.8.0",
+    "fontfaceobserver": "^2.3.0",
     "uuid": "^9.0.1",
     "vue": "^3.4.19",
     "vue-advanced-cropper": "^2.8.8",
