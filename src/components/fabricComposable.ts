@@ -15,6 +15,7 @@ export interface FabricJson {
 
 export function useFabricCanvas() {
   let canvas: fabric.Canvas;
+  let canvasEl: HTMLCanvasElement;
 
   const CONTAINER_WIDTH = 800;
   const CONTAINER_HEIGHT = 800;
@@ -112,6 +113,7 @@ export function useFabricCanvas() {
 
   const init = (canvasElementRef: Ref<HTMLCanvasElement | undefined>, _canvasWidth: number, _canvasHeight: number) => {
     if (canvasElementRef.value) {
+      canvasEl = canvasElementRef.value;
       canvas = new fabric.Canvas(canvasElementRef.value, {
         fireRightClick: true,
         fireMiddleClick: true,
@@ -156,6 +158,18 @@ export function useFabricCanvas() {
 
       // 이벤트 리스너 등록
 
+      // 테두리 추가
+      canvas.on('after:render', function () {
+        const color = 'rgba(136, 0, 255, 0.147)';
+        (canvas as any).contextContainer.strokeStyle = color;
+
+        canvas.forEachObject(function (obj: any) {
+          if (obj.source !== 'background') {
+            const bound = obj.getBoundingRect();
+            (canvas as any).contextContainer.strokeRect(bound.left + 0.5, bound.top + 0.5, bound.width, bound.height);
+          }
+        });
+      });
       // 선택된 오브젝트 가져오기
       canvas.on('selection:created', updateSelectedObjects);
       canvas.on('selection:updated', updateSelectedObjects);
@@ -385,7 +399,6 @@ export function useFabricCanvas() {
     });
 
     await loadJSON(json);
-    const objects = canvas.getObjects();
 
     setCenter(width!, height!);
     resetZoom();
