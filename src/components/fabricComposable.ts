@@ -1,8 +1,12 @@
 import { ref, onMounted, onUnmounted, Ref } from 'vue';
 import { fabric } from 'fabric';
+import FontFaceObserver from 'fontfaceobserver';
 
 type FabricBackgroundImage = any; // 라이브러리에 type이 없어서 any 사용
-
+type TextOptions = Pick<
+  fabric.ITextboxOptions,
+  'fontFamily' | 'fill' | 'fontSize' | 'fontStyle' | 'fontWeight' | 'textAlign' | 'underline' | 'linethrough' | 'textBackgroundColor' | 'left' | 'top' | 'scaleX' | 'scaleY' | 'text'
+>;
 interface CustomFabricObject extends fabric.Object {
   source?: 'background';
   crossOrigin?: 'anonymouse';
@@ -289,13 +293,27 @@ export function useFabricCanvas() {
     );
   };
 
+  const checkFontLoaded = (fontName: string) => {
+    const myfont = new FontFaceObserver(fontName);
+    myfont
+      .load()
+      .then(() => {
+        console.log('체크완');
+      })
+      .catch(function (e) {
+        console.log(e);
+        alert('font loading failed ' + fontName);
+      });
+  };
   // 텍스트 추가
   const addText = (text: string) => {
     if (!canvas) return;
+    checkFontLoaded('Song Myung');
     const fabricText = new fabric.Textbox(text, {
       editable: true,
       dirty: true,
-    });
+      fontFamily: 'Song Myung',
+    } as TextOptions);
     canvas.add(fabricText);
     canvas.setActiveObject(fabricText);
   };

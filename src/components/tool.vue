@@ -1,20 +1,30 @@
 <template>
-  <div class="p-5 flex justify-between bg-gray-50 w-full mb-5">
-    <div>
-      <button @click="handleClickImageList" class="p-1 mr-3 bg-gray-200">이미지 추가</button>
-      <button class="p-1 mr-3 bg-gray-200" @click="handleUploadClick">업로드 이미지</button>
-      <button @click="canvasControls.addText('Text')" class="p-1 mr-3 bg-gray-200">텍스트 추가</button>
+  <div class="bg-gray-50 mb-5 w-full p-5">
+    <div class="flex justify-between w-full mb-5">
+      <div>
+        <button @click="handleClickImageList" class="p-1 mr-3 bg-gray-200">이미지 추가</button>
+        <button class="p-1 mr-3 bg-gray-200" @click="handleUploadClick">업로드 이미지</button>
+        <button @click="canvasControls.addText('Text')" class="p-1 mr-3 bg-gray-200">텍스트 추가</button>
 
-      <button :disabled="!canvasControls.selectedObjects.value.length" @click="canvasControls.deleteActiveObjects" class="p-1 bg-red-100 disabled:text-gray-400 disabled:bg-gray-50">선택 삭제</button>
-      <input :value="canvasControls.currentZoom.value" class="ml-3" type="text" readonly />
+        <button :disabled="!canvasControls.selectedObjects.value.length" @click="canvasControls.deleteActiveObjects" class="p-1 bg-red-100 disabled:text-gray-400 disabled:bg-gray-50">
+          선택 삭제
+        </button>
+        <input :value="canvasControls.currentZoom.value" class="ml-3" type="text" readonly />
+      </div>
+
+      <div>
+        <button @click="loadDefaultTemplate" class="p-1 bg-gray-200 mr-3">기본 템플릿 불러오기</button>
+        <button @click="isShowModal = true" class="p-1 bg-gray-200 mr-3">JSON 불러오기</button>
+
+        <button class="p-1 mr-3 bg-gray-200" @click="save">JSON 내보내기</button>
+        <button @click="exportImage" class="p-1 bg-gray-200 mr-3">이미지 저장하기</button>
+      </div>
     </div>
-
-    <div>
-      <button @click="loadDefaultTemplate" class="p-1 bg-gray-200 mr-3">기본 템플릿 불러오기</button>
-      <button @click="isShowModal = true" class="p-1 bg-gray-200 mr-3">JSON 불러오기</button>
-
-      <button class="p-1 mr-3 bg-gray-200" @click="save">JSON 내보내기</button>
-      <button @click="exportImage" class="p-1 bg-gray-200 mr-3">이미지 저장하기</button>
+    <div class="w-full">
+      <select>
+        <option>폰트 1</option>
+        <option>폰트 2</option>
+      </select>
     </div>
   </div>
 
